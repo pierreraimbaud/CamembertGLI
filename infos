@@ -1,0 +1,3 @@
+modèle = seulement les données - pas de awt/swing
+view = représentation graphique
+controller gere les interactions user : selectionner quartier, naviguer

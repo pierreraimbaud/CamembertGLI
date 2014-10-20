@@ -51,12 +51,19 @@ public class TIC_Controller
 		return this.getTouchee() != -1;
 	}
 	
-	public boolean controlMouvement(){
+	/*public boolean controlMouvement(){
 		touchee = (touchee + mouvement)%m.getTableau().size();
 		if (touchee == -1){
 			touchee = m.getTableau().size()-1;			
 		}
 		return this.getMouvement() != 0;
+	}*/
+	public boolean controlMouvement(){
+	touchee = (touchee + mouvement)%m.getTableau().length;
+	if (touchee == -1){
+		touchee = m.getTableau().length-1;			
 	}
+	return this.getMouvement() != 0;
+}
 }
 

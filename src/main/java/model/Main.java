@@ -16,17 +16,14 @@ import javax.swing.table.DefaultTableModel;
 public class Main {
 
 	public static void main(String[] args) {
+
 		String titre = "Dépenses du mois";
 
-		//ArrayList<Triplet> lt = new ArrayList<Triplet>();
-		Object [][] lt =  {
-				{"Loyer", 200f, "Mamie"},
-				{"Nourriture", 150f, "Estomac"},
-				{"Vetements", 20f, "Corps"},
-				{"Croquettes", 60f, "Chachou"},
-				{"Medecin", 60f, "Santé"}
-		};
+		/******************* Jeu de données *****************************/
 
+		/*** Dans un premier temps nous avions utilisé des ArrayList personnalisés ***/
+
+		//ArrayList<Triplet> lt = new ArrayList<Triplet>();
 		// Triplet e = new Triplet ("Loyer", 200, "Pour mamie");
 		// lt.add(e);
 
@@ -39,37 +36,61 @@ public class Main {
 		// Triplet h = new Triplet ("Chachou", 60, "Pour le gros chachou");
 		// lt.add(h);
 
+		/*** Dans un second nous avons utilisé un tableau d'objets (utile pour les tables) ****/
+
+		Object [][] lt =  {
+				{"Loyer", 200f, "Mamie"},
+				{"Nourriture", 150f, "Estomac"},
+				{"Vetements", 20f, "Corps"},
+				{"Croquettes", 60f, "Chachou"},
+				{"Medecin", 60f, "Santé"}
+		};
+
+
+		//Instanciation du modèle
 		final TIC_Model m = new TIC_Model(titre, lt);
 		m.setTotalModel();
 
-		// création de l'application
-		final JFrame fenetre = new JFrame();
-
-		// affectation du titre
-		fenetre.setTitle("Camembert Interactif Application");
-
-		// affectation de l'opération à effectuer lors de la fermeture de la fenêtre
-		fenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-		// taille et position
-		fenetre.setPreferredSize(new Dimension(900, 600));
-
+		//Instanciation de la vue
 		TIC_View v = new TIC_View();
 		v.setTIC_Model(m);
 
+		// Instantiation du controlleur
+		TIC_Controller c = new TIC_Controller(m, v);
+		v.setTIC_Controller(c);
+
+		// Création de l'application
+		final JFrame fenetre = new JFrame();
+
+		// Affectation du titre
+		fenetre.setTitle("Camembert Interactif Application");
+
+		// Taille
+		fenetre.setPreferredSize(new Dimension(900, 600));
+
+		// Affectation de l'opération à effectuer lors de la fermeture de la fenêtre
+		fenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		// Ajout d'un layout pour gérer plusieurs espaces dans la fenêtre
 		fenetre.setLayout(new BorderLayout());
 
-		//ArrayList<Triplet> l = m.getTableau();
-		//String[] columnNames = { "titre", "valeur", "description"};
-		//final JTable table = new JTable(m.getTableau(), columnNames);
-		DefaultTableModel model = new DefaultTableModel(); 
+		// Table personnalisée pour représenter le modèle m
+
+		DefaultTableModel model = new DefaultTableModel();
+
 		final TableCamembert table = new TableCamembert(model, m);
+
 		table.setModelToModel(model);
+
+		// Ajout de cette table à la fenêtre d'application
 		fenetre.getContentPane().add(table, BorderLayout.WEST);
-		table.setCellSelectionEnabled(true);
-		ListSelectionModel cellSelectionModel = table.getSelectionModel();
+
+		// Options d'édition
+		table.setCellSelectionEnabled(true);		
+		ListSelectionModel cellSelectionModel = table.getSelectionModel();		
 		cellSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
+		// Listener pour édition de la table
 		CellEditorListener ChangeNotification = new CellEditorListener() {
 			public void editingCanceled(ChangeEvent e) {
 				System.out.println("The user canceled editing.");
@@ -80,13 +101,14 @@ public class Main {
 				m.setCellTableau(row, col, table.getValueAt(row, col));
 			}
 		};
-
 		table.getDefaultEditor(Object.class).addCellEditorListener(ChangeNotification);
 
+		// Bouton pour ajout d'une donnée
 		JButton addData = new JButton();
 		addData.setText("Add");
 		addData.setPreferredSize(new Dimension(70,0));
 		fenetre.getContentPane().add(addData, BorderLayout.EAST);
+		// Listener pour ajout
 		addData.addActionListener(new ActionListener(){
 
 			@Override
@@ -98,41 +120,41 @@ public class Main {
 			}
 		});
 
+		// Bouton pour changer le titre
 		JButton changeTitre = new JButton();
 		changeTitre.setText("Je veux changer le titre");
 		fenetre.getContentPane().add(changeTitre, BorderLayout.NORTH);
-
+		// Listener pour changement titre
 		changeTitre.addActionListener(new ActionListener(){
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				final JTextField newTitre = new JTextField();
+				// Ajout d'une boite de dialogue
 				fenetre.getContentPane().add(newTitre, BorderLayout.SOUTH);
 				fenetre.validate();
-
+				// Listener de cette boite
 				newTitre.addActionListener(new ActionListener(){
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
+						// Récupération du texte entré
 						m.setTitre(newTitre.getText());
+						// On retire la boite de dialogue
 						fenetre.getContentPane().remove(newTitre);
 						fenetre.validate();
 					}
 				});
 			}
-
 		});
 
+		// Ajout de la vue à la fenêtre
 		fenetre.getContentPane().add(v, BorderLayout.CENTER);
 
-		TIC_Controller c = new TIC_Controller(m, v);
-		v.setTIC_Controller(c);
-
+		// Ajout des patrons user
 		m.addObserver(v);
 		m.addObserver(table);
 
-		// rendre la fenêtre visible, pack fait en sorte que tous les composants de l'application soient à
-		// leur preferredSize, ou au dessus
+		// Pour rendre les composants bien visibles
 		fenetre.pack();
 		fenetre.setVisible(true);
 	}

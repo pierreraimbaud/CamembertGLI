@@ -1,6 +1,7 @@
 package model;
 
 public class Triplet {
+	
 	String nom;
 	float valeur;
 	String description;
@@ -23,17 +24,16 @@ public class Triplet {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
+
 	public Triplet(String nom, float valeur, String description) {
 		super();
 		this.nom = nom;
 		this.valeur = valeur;
 		this.description = description;
 	}
-	
+
 	public String toString() {
 		return "Triplet [nom=" + nom + ", valeur=" + valeur + ", description="
 				+ description + "]";
 	}
-	
 }

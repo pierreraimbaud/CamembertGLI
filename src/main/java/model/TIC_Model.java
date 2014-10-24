@@ -13,14 +13,6 @@ public class TIC_Model extends Observable
 	DefaultTableModel model;
 	float total;
 
-	public DefaultTableModel getModel() {
-		return model;
-	}
-
-	public void setModel(DefaultTableModel model) {
-		this.model = model;
-	}
-
 	public String getTitre() {
 		return titre;
 	}
@@ -31,6 +23,14 @@ public class TIC_Model extends Observable
 		notifyObservers(titre);
 	}
 
+	/*public ArrayList<Triplet> getTableau() {
+		return tableau;
+	}
+
+	public void setTableau(ArrayList<Triplet> tableau) {
+		this.tableau = tableau;
+	}*/
+
 	public Object [][] getTableau() {
 		return tableau;
 	}
@@ -39,20 +39,13 @@ public class TIC_Model extends Observable
 		this.tableau = tableau;
 	}
 
-	public void setCellTableau(int i, int j, Object cell) {
-		this.tableau[i][j] = cell;
-		setTotalModel();
-		setChanged();
-		notifyObservers(tableau);
+	public DefaultTableModel getModel() {
+		return model;
 	}
 
-	/*public ArrayList<Triplet> getTableau() {
-		return tableau;
+	public void setModel(DefaultTableModel model) {
+		this.model = model;
 	}
-
-	public void setTableau(ArrayList<Triplet> tableau) {
-		this.tableau = tableau;
-	}*/
 
 	public float getTotal() {
 		return total;
@@ -72,33 +65,32 @@ public class TIC_Model extends Observable
 		this.titre = titre;
 		this.tableau = tableau;
 	}
-	/*public TIC_Model(String titre, ArrayList<Triplet> tableau) {
-		this.titre = titre;
-		this.tableau = tableau;
-	}*/
-
-	/*public void setTotalModel(){
-		float rep = 0;
-		for (int i =0; i< this.tableau.size(); i++){
-			rep += this.getTableau().get(i).valeur;
-		}
-		this.setTotal(rep);
-	}*/
 
 	public void setTotalModel(){
 		float rep = 0;
 		for (int i =0; i< this.tableau.length; i++){
+			// On convertit en String et on parse, car dans la table les données sont String
 			rep += Float.parseFloat("" + this.getTableau()[i][1]); //en 1 il y a la valeur
 		}
 		this.setTotal(rep);
 	}
 
+	// Calcul de la proportion d'une donnée sur le total
+	public float getPourcentage(int pos){
+		float valPos = Float.parseFloat(""+ this.getTableau()[pos][1]);
+		float total = this.getTotal();
+		return valPos/total*100;
+	}
 
-	/*public void addValeur(Triplet t){
-		this.getTableau().add(t);
-		this.total += t.getValeur();
-	}*/
+	// Edition d'une donnée du modèle
+	public void setCellTableau(int i, int j, Object cell) {
+		this.tableau[i][j] = cell;
+		setTotalModel();
+		setChanged();
+		notifyObservers(tableau);
+	}
 
+	// Ajout d'une nouvelle donnée
 	public void addValeur(Object t []){
 		Object [][] ancien = this.getTableau();
 		int taille = ancien.length;
@@ -108,8 +100,11 @@ public class TIC_Model extends Observable
 			nouveau[i]=ancien[i];
 		}
 		nouveau[taille] = t;
+		// On affecte le nouveau tableau
 		this.setTableau(nouveau);
+		// On recalcule le total
 		this.setTotalModel();
+		// On ajoute une colonne au model
 		model.addRow(t);
 		setChanged();
 		notifyObservers(tableau);
@@ -119,17 +114,5 @@ public class TIC_Model extends Observable
 	public String toString() {
 		return "TIC_Model [titre=" + titre + ", tableau=" + tableau
 				+ ", total=" + total + "]";
-	}
-
-	/*public float getPourcentage(int pos){
-		float valPos = this.getTableau().get(pos).valeur;
-		float total = this.getTotal();
-		return valPos/total*100;
-	}*/
-
-	public float getPourcentage(int pos){
-		float valPos = Float.parseFloat(""+ this.getTableau()[pos][1]);
-		float total = this.getTotal();
-		return valPos/total*100;
 	}
 }

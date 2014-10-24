@@ -8,7 +8,22 @@ public class TIC_Controller
 	int touchee = -1;
 	int mouvement = 0;
 
-	
+	public TIC_Model getM() {
+		return m;
+	}
+
+	public void setM(TIC_Model m) {
+		this.m = m;
+	}
+
+	public TIC_View getV() {
+		return v;
+	}
+
+	public void setV(TIC_View v) {
+		this.v = v;
+	}
+
 	public int getToucheePassee() {
 		return touchee;
 	}
@@ -16,7 +31,7 @@ public class TIC_Controller
 	public void setToucheePassee(int toucheePassee) {
 		this.touchee = toucheePassee;
 	}
-	
+
 	public int getTouchee() {
 		return touchee;
 	}
@@ -39,31 +54,15 @@ public class TIC_Controller
 		this.v=v;
 	}
 
-	public TIC_Model getTIC_Model () {
-		return m;
-	}
-
-	public void setTIC_Model(TIC_Model m) {
-		this.m = m;
-	}
-	
 	public boolean controlCamembert(){
 		return this.getTouchee() != -1;
 	}
-	
-	/*public boolean controlMouvement(){
-		touchee = (touchee + mouvement)%m.getTableau().size();
+
+	public boolean controlMouvement(){
+		touchee = (touchee + mouvement)%m.getTableau().length;
 		if (touchee == -1){
-			touchee = m.getTableau().size()-1;			
+			touchee = m.getTableau().length-1;			
 		}
 		return this.getMouvement() != 0;
-	}*/
-	public boolean controlMouvement(){
-	touchee = (touchee + mouvement)%m.getTableau().length;
-	if (touchee == -1){
-		touchee = m.getTableau().length-1;			
 	}
-	return this.getMouvement() != 0;
 }
-}
-

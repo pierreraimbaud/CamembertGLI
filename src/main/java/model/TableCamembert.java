@@ -27,11 +27,9 @@ public class TableCamembert extends JTable implements Observer {
 		this.m = m;
 	}
 
-
 	public TableCamembert (TIC_Model m){
 		super();
 		this.m=m;
-
 	}
 
 	public TableCamembert (Object[] col, Object [][] data, TIC_Model m){

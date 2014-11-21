@@ -15,9 +15,13 @@ import javax.swing.table.DefaultTableModel;
 
 public class Main {
 
+	private static String titreCamembert = "Dépenses du mois";
+	private static String titreAppli = "Camembert Interactif Application";
+	private static String nomBoutonChg = "Je veux changer le titre";
+
 	public static void main(String[] args) {
 
-		String titre = "Dépenses du mois";
+		//String titre = title;
 
 		/******************* Jeu de données *****************************/
 
@@ -46,9 +50,8 @@ public class Main {
 				{"Medecin", 60f, "Santé"}
 		};
 
-
 		//Instanciation du modèle
-		final TIC_Model m = new TIC_Model(titre, lt);
+		final TIC_Model m = new TIC_Model(titreCamembert, lt);
 		m.setTotalModel();
 
 		//Instanciation de la vue
@@ -63,7 +66,7 @@ public class Main {
 		final JFrame fenetre = new JFrame();
 
 		// Affectation du titre
-		fenetre.setTitle("Camembert Interactif Application");
+		fenetre.setTitle(titreAppli);
 
 		// Taille
 		fenetre.setPreferredSize(new Dimension(900, 600));
@@ -110,8 +113,6 @@ public class Main {
 		fenetre.getContentPane().add(addData, BorderLayout.EAST);
 		// Listener pour ajout
 		addData.addActionListener(new ActionListener(){
-
-			@Override
 			public void actionPerformed(ActionEvent e) {
 				Object t [] = {"Nom", 20f, "Description"};
 				m.addValeur(t);
@@ -122,7 +123,7 @@ public class Main {
 
 		// Bouton pour changer le titre
 		JButton changeTitre = new JButton();
-		changeTitre.setText("Je veux changer le titre");
+		changeTitre.setText(nomBoutonChg);
 		fenetre.getContentPane().add(changeTitre, BorderLayout.NORTH);
 		// Listener pour changement titre
 		changeTitre.addActionListener(new ActionListener(){

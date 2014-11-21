@@ -1,7 +1,6 @@
 package model;
 
-public class TIC_Controller
-{
+public class TIC_Controller{
 	TIC_Model m;
 	TIC_View v;
 	int toucheePassee = -1;

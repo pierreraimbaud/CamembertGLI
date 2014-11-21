@@ -2,11 +2,10 @@ package model;
 
 //import java.util.ArrayList;
 import java.util.Observable;
-
 import javax.swing.table.DefaultTableModel;
 
-public class TIC_Model extends Observable
-{	
+public class TIC_Model extends Observable{
+	
 	String titre;
 	//ArrayList<Triplet> tableau;
 	Object [][] tableau;
@@ -75,6 +74,11 @@ public class TIC_Model extends Observable
 		this.setTotal(rep);
 	}
 
+	public String toString() {
+		return "TIC_Model [titre=" + titre + ", tableau=" + tableau
+				+ ", total=" + total + "]";
+	}
+
 	// Calcul de la proportion d'une donnée sur le total
 	public float getPourcentage(int pos){
 		float valPos = Float.parseFloat(""+ this.getTableau()[pos][1]);
@@ -109,10 +113,5 @@ public class TIC_Model extends Observable
 		setChanged();
 		notifyObservers(tableau);
 		notifyObservers(model);
-	}
-
-	public String toString() {
-		return "TIC_Model [titre=" + titre + ", tableau=" + tableau
-				+ ", total=" + total + "]";
 	}
 }

@@ -11,9 +11,7 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Random;
-
 import javax.swing.JComponent;
-
 
 public class TIC_View extends JComponent implements MouseListener, Observer {
 
@@ -21,16 +19,22 @@ public class TIC_View extends JComponent implements MouseListener, Observer {
 	TIC_Model m;
 
 	private static final long serialVersionUID = 6574624782484113309L;
+	
 	private static ArrayList<Color> lc = new ArrayList<Color>();
 	private static ArrayList<Arc2D.Double> la = new ArrayList<Arc2D.Double>();
+	
 	private static Rectangle2D.Double b1 =null;
 	private static Rectangle2D.Double b2 =null;
 	private static Rectangle2D.Double b3 =null;
 	private static Rectangle2D.Double b4 =null;
+	
 	private static float angle = 0;
 	private static boolean mouseDown = false;
 	private static boolean isRunning = false;
-
+	
+	private static String chgFocus = "Changement focus";
+	private static String monnaie = " euros";
+	
 	public TIC_View(){
 		Color c = new Color (210,100,170);
 		Color d = new Color (180,70,140);
@@ -95,7 +99,14 @@ public class TIC_View extends JComponent implements MouseListener, Observer {
 		int wd = 200;
 		int hd = 120;
 
+		int rx1 = 150;
+		int rx2 = 290;
+		int ry = 400;
+		int rw = 20;
+		int rh = 20;
+		int ryRot = 450;
 
+		
 		// Dessin du cadre description
 		g2.setPaint(Color.WHITE);
 		g2.fill(new Rectangle2D.Double(xd, yd , wd , hd ));
@@ -104,43 +115,46 @@ public class TIC_View extends JComponent implements MouseListener, Observer {
 
 		// Dessin des boutons de changement -> et <-
 		if(this.getTIC_Controller().getTouchee() != -1){
-			b1 = new Rectangle2D.Double(150, 400, 20, 20);
-			b2 = new Rectangle2D.Double(290, 400, 20, 20);
+			b1 = new Rectangle2D.Double(rx1, ry, rw, rh);
+			b2 = new Rectangle2D.Double(rx2, ry, rw, rh);
 			g2.setPaint(lc.get(0));
 			g2.fill(b1);
 			g2.setPaint(lc.get(0));
 			g2.fill(b2);
 			g2.setPaint(Color.WHITE);
-			g2.drawString("<", 155, 415);
+			g2.drawString("<", rx1 + 5, ry + 15);
 			g2.setPaint(Color.BLACK);
-			g2.drawString("Changement focus", 170, 415);
+			g2.drawString(chgFocus, rx1 + 20, ry + 15);
 			g2.setPaint(Color.WHITE);
-			g2.drawString(">", 295, 415);
+			g2.drawString(">", rx2+ 5, ry + 15);
 		}
 
 		// Dessin des boutons de rotation
-		b3 = new Rectangle2D.Double(150, 450, 20, 20);
-		b4 = new Rectangle2D.Double(290, 450, 20, 20);
+		b3 = new Rectangle2D.Double(rx1, ryRot, rw, rh);
+		b4 = new Rectangle2D.Double(rx2, ryRot, rw, rh);
 		g2.setPaint(new Color(40,40,80));
 		g2.fill(b3);
 		g2.setPaint(new Color(40,40,80));
 		g2.fill(b4);
 		g2.setPaint(Color.WHITE);
-		g2.drawString("<", 155, 465);
+		g2.drawString("<", rx1 + 5, ryRot + 15);
 		g2.setPaint(Color.BLACK);
-		g2.drawString("Rotation", 200, 465);
+		g2.drawString("Rotation", rx1 + 50, ryRot + 15);
 		g2.setPaint(Color.WHITE);
-		g2.drawString(">", 295, 465);
+		g2.drawString(">", rx2 + 5, ryRot + 15);
 
 		// Dessin des arcs
 		for (int i = 0; i< t.length ;i++){
 			pourcentAngle = m.getPourcentage(i)*3.6f;
+			
 			Arc2D.Double a = new Arc2D.Double(x, y, w, h, angle,pourcentAngle-delta, pie);
+			
 			if(this.getTIC_Controller().getTouchee() == i){
 				a = new Arc2D.Double(x-w/8, y-h/8, 5*w/4, 5*h/4, angle,pourcentAngle- delta, pie);
 				g2.setPaint(Color.BLACK);
 				g2.drawString((String)this.getTIC_Model().getTableau()[i][2],xd, yd+15);
 			}
+			
 			if (i<lc.size()){
 				g2.setPaint(lc.get(i));
 			}
@@ -153,6 +167,7 @@ public class TIC_View extends JComponent implements MouseListener, Observer {
 				lc.add(c);
 				g2.setPaint(lc.get(i));
 			}
+			
 			g2.fill(a);
 			la.add(a);
 			g2.fill(new Rectangle2D.Double(xl, yl, wl, hl));
@@ -173,7 +188,7 @@ public class TIC_View extends JComponent implements MouseListener, Observer {
 		// Dessin du titre
 		g2.setPaint(Color.WHITE);
 		g2.drawString(this.getTIC_Model().getTitre(), x+w/2-50, y+h/2);
-		g2.drawString(this.getTIC_Model().getTotal()+" euros", x+w/2-50, y+h/2+20);	
+		g2.drawString(this.getTIC_Model().getTotal()+ monnaie, x+w/2-50, y+h/2+20);	
 
 		// Gestion du mouvement 'changement focus'
 		int touchee = c.getTouchee();
@@ -246,11 +261,9 @@ public class TIC_View extends JComponent implements MouseListener, Observer {
 		}
 	}
 
-	@Override
 	public void mousePressed(MouseEvent e) {
 		int x = e.getX();
 		int y = e.getY();
-
 		// Sur quel bouton a-t-on cliqué ?
 		if (b3.contains(x, y)){
 			if (e.getButton() == MouseEvent.BUTTON1) {
@@ -265,26 +278,19 @@ public class TIC_View extends JComponent implements MouseListener, Observer {
 			}
 		}
 	}
-
-	@Override
-	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub	
-	}
-
-	@Override
+	
 	public void mouseReleased(MouseEvent e) {
 		if (e.getButton() == MouseEvent.BUTTON1) {
 			mouseDown = false;
 		}
 	}
-
-	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+	}
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub	
+	}
+	
 	public void update(Observable arg0, Object arg1) {
 		repaint();
 	}	
